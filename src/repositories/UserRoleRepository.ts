@@ -12,26 +12,33 @@ export class UserRoleRepository implements IUserRoleRepository {
         this.userRoleRepository = AppDataSource.getRepository(UserRole);
     }
 
-    async list(name?: string): Promise<UserRole[]> {
+    async list(userId: number): Promise<UserRole[]> {
 
         return await this.userRoleRepository.find({
+            relations: {
+                user: true,
+                role: true
+            },
             where: {
-                name: name ? Like("%" + name + "%") : undefined
+                userRoleId: userId
             }
         });
     }
 
-    async detail(id: number): Promise<UserRole> {
+    async detail(userRoleId: number): Promise<UserRole> {
 
-        return await this.userRoleRepository.findOneBy({ userRoleId: id });
+        return await this.userRoleRepository.findOne({
+            relations: {
+                user: true,
+                role: true
+            },
+            where: {
+                userRoleId
+            }
+        });
     }
 
     async create(userRole: UserRole): Promise<UserRole> {
-
-        return await this.userRoleRepository.save(userRole);
-    }
-
-    async update(userRole: UserRole): Promise<UserRole> {
 
         return await this.userRoleRepository.save(userRole);
     }

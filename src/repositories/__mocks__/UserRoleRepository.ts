@@ -1,13 +1,15 @@
 import { User } from "../../entities/User";
+import { Role } from "../../entities/Role";
+import { UserRole } from "../../entities/UserRole";
 import { IUserRepository } from "../../interfaces/repositories/IUserRepository";
 
 export class UserRepository implements IUserRepository {
     
-    users: User[];
+    usersRoles: UserRole[];
 
     constructor() {
 
-        this.users = new Array();
+        this.usersRoles = new Array();
 
         const user1 = new User();
         user1.userId = 1;
@@ -16,23 +18,31 @@ export class UserRepository implements IUserRepository {
         user1.password = "12345";
         user1.lastLogin = new Date();
 
-        this.users.push(user1);
+        const role1 = new Role();
+        role1.roleId = 1;
+        role1.name = "Admin";
 
-        const user2 = new User();
-        user2.userId = 2;
-        user2.name = "User to Update";
-        user1.email = "update@email";
-        user1.password = "11111";
+        const role2 = new Role();
+        role2.roleId = 2;
+        role2.name = "collaborator";
 
-        this.users.push(user2);
+        const userRole1 = new UserRole();
+        userRole1.userRoleId = 1;        
+        userRole1.roleId = role1.roleId;
+        userRole1.role = role1;
+        userRole1.userId = user1.userId;
+        userRole1.user = user1;
 
-        const user3 = new User();
-        user3.userId = 3;
-        user3.name = "User to Delete";
-        user1.email = "delete@email";
-        user1.password = "222222";
+        this.usersRoles.push(userRole1);
 
-        this.users.push(user3);
+        const userRole2 = new UserRole();
+        userRole2.userRoleId = 1;        
+        userRole2.roleId = role1.roleId;
+        userRole2.role = role1;
+        userRole2.userId = user1.userId;
+        userRole2.user = user1;
+
+        this.usersRoles.push(userRole2);
     }
 
     async list(name: string = ''): Promise<User[]> {
