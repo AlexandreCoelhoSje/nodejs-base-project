@@ -1,15 +1,15 @@
 import { User } from "../../entities/User";
 import { Role } from "../../entities/Role";
 import { UserRole } from "../../entities/UserRole";
-import { IUserRepository } from "../../interfaces/repositories/IUserRepository";
+import { IUserRoleRepository } from "../../interfaces/repositories/IUserRoleRepository";
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements IUserRoleRepository {
     
-    usersRoles: UserRole[];
+    userRoles: UserRole[];
 
     constructor() {
 
-        this.usersRoles = new Array();
+        this.userRoles = new Array();
 
         const user1 = new User();
         user1.userId = 1;
@@ -33,7 +33,7 @@ export class UserRepository implements IUserRepository {
         userRole1.userId = user1.userId;
         userRole1.user = user1;
 
-        this.usersRoles.push(userRole1);
+        this.userRoles.push(userRole1);
 
         const userRole2 = new UserRole();
         userRole2.userRoleId = 1;        
@@ -42,56 +42,45 @@ export class UserRepository implements IUserRepository {
         userRole2.userId = user1.userId;
         userRole2.user = user1;
 
-        this.usersRoles.push(userRole2);
+        this.userRoles.push(userRole2);
     }
 
-    async list(name: string = ''): Promise<User[]> {
+    async list(userId: number): Promise<UserRole[]> {
 
         return new Promise((resolve, reject) => {
 
-            resolve(this.users.filter((item) => item.name.includes(name)));
+            resolve(this.userRoles.filter((item) => item.userId == userId));
         });
     }
 
-    async detail(id: number): Promise<User> {
+    async detail(userId: number): Promise<UserRole> {
 
         return new Promise((resolve, reject) => {
 
-            resolve(this.users.find((item) => item.userId == id));
+            resolve(this.userRoles.find((item) => item.userId == userId));
         });
     }
 
-    async create(user: User): Promise<User> {
+    async create(userRole: UserRole): Promise<UserRole> {
 
-        user.userId = this.getID();
+        userRole.userId = this.getID();
 
-        this.users.push(user);
+        this.userRoles.push(userRole);
 
-        return new Promise((resolve, reject) => resolve(user));
+        return new Promise((resolve, reject) => resolve(userRole));
     }
 
-    async update(user: User): Promise<User> {
+    async delete(userRole: UserRole): Promise<UserRole> {
 
-        const entityToUpdate = this.users.find((current: User) => user.userId == current.userId);
+        const entityFound = this.userRoles.find((current: UserRole) => current.userRoleId == userRole.userRoleId);
 
-        entityToUpdate.name = user.name;
-        entityToUpdate.email = user.email;
-        entityToUpdate.lastLogin = user.lastLogin;
-
-        return new Promise((resolve, rejects) => resolve(entityToUpdate));
-    }
-
-    async delete(user: User): Promise<User> {
-
-        const entityFound = this.users.find((current: User) => current.userId == user.userId);
-
-        this.users = this.users.filter((current: User) => current.userId != user.userId);
+        this.userRoles = this.userRoles.filter((current: UserRole) => current.userRoleId != userRole.userRoleId);
 
         return new Promise((resolve, reject) => resolve(entityFound));
     }
 
     getID(): number {
         
-        return this.users.length + 1;
+        return this.userRoles.length + 1;
     }
 }
