@@ -1,8 +1,12 @@
 import { UserRole } from "../../entities/UserRole";
 
-export interface IUserRoleRepository {
+interface IFilterUserRole {
+    userId?: number;
+    roleId?: number;
+}
+interface IUserRoleRepository {
 
-    list: (userId: number) => Promise<UserRole[]>;
+    list: ({ userId, roleId }: IFilterUserRole) => Promise<UserRole[]>;
 
     detail: (userRoleId: number) => Promise<UserRole>;
 
@@ -10,3 +14,5 @@ export interface IUserRoleRepository {
 
     delete: (userRole: UserRole) => Promise<UserRole>;
 }
+
+export { IFilterUserRole, IUserRoleRepository }

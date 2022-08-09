@@ -1,10 +1,10 @@
 import { User } from "../../entities/User";
 import { Role } from "../../entities/Role";
 import { UserRole } from "../../entities/UserRole";
-import { IUserRoleRepository } from "../../interfaces/repositories/IUserRoleRepository";
+import { IFilterUserRole, IUserRoleRepository } from "../../interfaces/repositories/IUserRoleRepository";
 
 export class UserRepository implements IUserRoleRepository {
-    
+
     userRoles: UserRole[];
 
     constructor() {
@@ -27,7 +27,7 @@ export class UserRepository implements IUserRoleRepository {
         role2.name = "collaborator";
 
         const userRole1 = new UserRole();
-        userRole1.userRoleId = 1;        
+        userRole1.userRoleId = 1;
         userRole1.roleId = role1.roleId;
         userRole1.role = role1;
         userRole1.userId = user1.userId;
@@ -36,7 +36,7 @@ export class UserRepository implements IUserRoleRepository {
         this.userRoles.push(userRole1);
 
         const userRole2 = new UserRole();
-        userRole2.userRoleId = 1;        
+        userRole2.userRoleId = 1;
         userRole2.roleId = role1.roleId;
         userRole2.role = role1;
         userRole2.userId = user1.userId;
@@ -45,11 +45,13 @@ export class UserRepository implements IUserRoleRepository {
         this.userRoles.push(userRole2);
     }
 
-    async list(userId: number): Promise<UserRole[]> {
+    async list({ userId, roleId }: IFilterUserRole): Promise<UserRole[]> {
 
         return new Promise((resolve, reject) => {
 
-            resolve(this.userRoles.filter((item) => item.userId == userId));
+            resolve(this.userRoles.filter((item) => {
+                return (userId ? item.userId == userId : true) && (roleId ? item.roleId == roleId : true);
+            }));
         });
     }
 
@@ -80,7 +82,7 @@ export class UserRepository implements IUserRoleRepository {
     }
 
     getID(): number {
-        
+
         return this.userRoles.length + 1;
     }
 }

@@ -1,7 +1,7 @@
 import { Like, Repository } from "typeorm";
 import { UserRole } from "../entities/UserRole";
 import { AppDataSource } from "../database/data-source";
-import { IUserRoleRepository } from "../interfaces/repositories/IUserRoleRepository";
+import { IFilterUserRole, IUserRoleRepository } from "../interfaces/repositories/IUserRoleRepository";
 
 export class UserRoleRepository implements IUserRoleRepository {
 
@@ -12,7 +12,7 @@ export class UserRoleRepository implements IUserRoleRepository {
         this.userRoleRepository = AppDataSource.getRepository(UserRole);
     }
 
-    async list(userId: number): Promise<UserRole[]> {
+    async list({userId, roleId}: IFilterUserRole): Promise<UserRole[]> {
 
         return await this.userRoleRepository.find({
             relations: {
@@ -20,7 +20,8 @@ export class UserRoleRepository implements IUserRoleRepository {
                 role: true
             },
             where: {
-                userRoleId: userId
+                userId: userId ? userId : undefined,
+                roleId: roleId ? roleId : undefined
             }
         });
     }
