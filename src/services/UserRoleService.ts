@@ -1,7 +1,4 @@
-import { User } from "../entities/User";
-import { Role } from "../entities/Role";
 import { UserRole } from "../entities/UserRole";
-
 import { UserRoleRepository } from "../repositories/UserRoleRepository";
 
 interface IUserRoleRequest {
@@ -18,11 +15,9 @@ export class UserRoleService {
         this.userRoleRepository = new UserRoleRepository();
     }
 
-    async list(userId: number): Promise<UserRole[]> {
-
-        const filtro = { userId: "", roleId: "" };
-
-        return await this.userRoleRepository.list(filtro);
+    async list({ userId, roleId }: IUserRoleRequest): Promise<UserRole[]> {
+       
+        return await this.userRoleRepository.list({ userId, roleId });
     }
 
     async detail(id: number): Promise<UserRole> {
@@ -37,7 +32,10 @@ export class UserRoleService {
 
     async create({userId, roleId }: IUserRoleRequest): Promise<UserRole> {
 
-        //verificar se o usuario ja tem a funcao
+        const userRoleAlreadyExists = await this.userRoleRepository.list({userId, roleId});
+        
+        if (userRoleAlreadyExists.length > 0)
+            throw new Error("the user already has the role");
         
         const userRole = new UserRole();
         userRole.userId = userId;
