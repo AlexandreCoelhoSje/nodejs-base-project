@@ -64,7 +64,7 @@ describe("test UserService", () => {
 
         const newUser = await userService.create(user);
 
-        expect(newUser).toHaveProperty("id");
+        expect(newUser).toHaveProperty("userId");
     });
 
     it("update user", async () => {

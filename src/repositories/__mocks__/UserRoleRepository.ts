@@ -3,7 +3,7 @@ import { Role } from "../../entities/Role";
 import { UserRole } from "../../entities/UserRole";
 import { IFilterUserRole, IUserRoleRepository } from "../../interfaces/repositories/IUserRoleRepository";
 
-export class UserRepository implements IUserRoleRepository {
+export class UserRoleRepository implements IUserRoleRepository {
 
     userRoles: UserRole[];
 
@@ -36,9 +36,9 @@ export class UserRepository implements IUserRoleRepository {
         this.userRoles.push(userRole1);
 
         const userRole2 = new UserRole();
-        userRole2.userRoleId = 1;
-        userRole2.roleId = role1.roleId;
-        userRole2.role = role1;
+        userRole2.userRoleId = 2;
+        userRole2.roleId = role2.roleId;
+        userRole2.role = role2;
         userRole2.userId = user1.userId;
         userRole2.user = user1;
 

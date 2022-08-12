@@ -20,8 +20,8 @@ export class UserRoleRepository implements IUserRoleRepository {
                 role: true
             },
             where: {
-                userId: userId ? userId : undefined,
-                roleId: roleId ? roleId : undefined
+                userId: typeof userId != undefined ? userId : undefined,
+                roleId: typeof roleId != undefined ? roleId : undefined
             }
         });
     }

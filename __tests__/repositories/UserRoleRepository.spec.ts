@@ -68,7 +68,7 @@ describe("test UserRoleRepository", () => {
 
         const userRoleRepository = new UserRoleRepository();
 
-        const userRole = await userRoleRepository.list(1);
+        const userRole = await userRoleRepository.list({userId: 1});
 
         expect(userRole).not.toBeNull();
         expect(userRole.length).toBeGreaterThanOrEqual(1);
@@ -79,7 +79,7 @@ describe("test UserRoleRepository", () => {
 
         const userRoleRepository = new UserRoleRepository();
 
-        const users = await userRoleRepository.list(0);
+        const users = await userRoleRepository.list({userId: 0});
 
         expect(users.length).toBe(0);
     });
